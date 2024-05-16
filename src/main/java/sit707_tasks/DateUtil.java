@@ -17,45 +17,18 @@ public class DateUtil {
 	 * Constructs object from given day, month and year.
 	 */
 	public DateUtil(int day, int month, int year) {
-	    // Check for valid day, month, and year based on equivalence classes
-	    if (!isValidDay(day, month, year))
-	        throw new RuntimeException("Invalid day: " + day + ", for month: " + month + ", year: " + year);
-	    if (!isValidMonth(month))
-	        throw new RuntimeException("Invalid month: " + month);
-	    if (!isValidYear(year))
-	        throw new RuntimeException("Invalid year: " + year);
-
-	    this.day = day;
-	    this.month = month;
-	    this.year = year;
-	}
-
-	private boolean isValidDay(int day, int month, int year) {
-	    // Validate day based on equivalence classes
-	    switch (month) {
-	        case 2: // February
-	            if (isLeapYear(year)) // Leap year
-	                return day >= 1 && day <= 29; // D1-D2
-	            else
-	                return day >= 1 && day <= 28; // D1
-	        case 4: case 6: case 9: case 11: // April, June, September, November
-	            return day >= 1 && day <= 30; // D1-D3
-	        default: // January, March, May, July, August, October, December
-	            return day >= 1 && day <= 31; // D1-D4
-	    }
-	}
-
-	private boolean isValidMonth(int month) {
-	    return month >= 1 && month <= 12;
-	}
-
-	private boolean isValidYear(int year) {
-	    return year >= 1700 && year <= 2024;
-	}
-
-	private boolean isLeapYear(int year) {
-	    // Check if the year is a leap year
-	    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+		// Is supplied day/month/year a valid date?
+		if (day < 1 || day > 31)
+			throw new RuntimeException("Invalid day: " + day + ", expected range 1-31");
+		if (month < 1 || month > 12)
+			throw new RuntimeException("Invalid month: " + month + ", expected range 1-12");
+		if (year < 1700 || year > 2024)
+			throw new RuntimeException("Invalid year: " + year + ", expected range 1700-2024");
+		if (day > monthDuration(month, year))
+			throw new RuntimeException("Invalid day: " + day + ", max day: " + monthDuration(month, year));
+		this.day = day;
+		this.month = month;
+		this.year = year;
 	}
 
 	public int getDay() {
